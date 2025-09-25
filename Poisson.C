@@ -93,7 +93,7 @@ void Poisson::jacobian (const NumericVector<Number> & soln,
       // out << "mesh n_boundary_ids: " << boundary_info.n_boundary_ids() << std::endl;
 
       for (const auto &node : elem->node_ref_range()){
-        if (boundary_info.n_boundary_ids(&node)) {
+        if (boundary_info.n_boundary_ids(&node) && !boundary_info.has_boundary_id(&node, 4) ) {
           dof_id_type local_dof_id = elem->local_node(node.id()); 
           for (unsigned int dof_j=0; dof_j<n_dofs; dof_j++) Ke(local_dof_id, dof_j) =0.0;
           Ke(local_dof_id,local_dof_id) = 1;
@@ -181,7 +181,7 @@ void Poisson::residual (const NumericVector<Number> & soln,
         // printf("rank %d node id %u dof_id %u\n", node.processor_id(), node.id(), dof_id);
         dof_id_type local_dof_id = elem->local_node(node.id()); 
  
-        if (boundary_info.n_boundary_ids(&node)) {
+        if (boundary_info.n_boundary_ids(&node) && !boundary_info.has_boundary_id(&node, 4)) {
           Re(local_dof_id) = soln(dof_id) - boundary_value(node, 0);
         }
       }

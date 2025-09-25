@@ -136,7 +136,7 @@ int main (int argc, char ** argv)
 #else
 
   // Skip this 2D example if libMesh was compiled as 1D-only.
-  libmesh_example_requires(2 <= LIBMESH_DIM, "2D support");
+  libmesh_example_requires(2 == dim, "2D support");
 
   // Read the mesh from file.  This is the coarse mesh that will be used
   // in example 10 to demonstrate adaptive mesh refinement.  Here we will
@@ -175,7 +175,6 @@ int main (int argc, char ** argv)
     elliptic_systems.add_system<NonlinearImplicitSystem> ("elliptic");
 
   unsigned int u_var = system.add_variable ("u", FIRST);
-
 
   Poisson lde(elliptic_systems, "elliptic", "u", boundary_value_u, rhs_value_f);
   system.nonlinear_solver->residual_object = &lde;
